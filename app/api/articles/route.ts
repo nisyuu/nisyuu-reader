@@ -9,8 +9,9 @@ export async function GET(request: Request) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
     const offset = (page - 1) * limit;
+    const dateFilter = searchParams.get('date_filter');
 
-    const { data, error } = await supabase
+    let query = supabase
       .from('articles')
       .select(`
         id,
@@ -20,7 +21,30 @@ export async function GET(request: Request) {
         pub_date,
         created_at,
         feeds!inner(name)
-      `)
+      `);
+
+    if (dateFilter) {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const dayBeforeYesterday = new Date(today);
+      dayBeforeYesterday.setDate(dayBeforeYesterday.getDate() - 2);
+
+      if (dateFilter === 'today') {
+        query = query.gte('pub_date', today.toISOString());
+      } else if (dateFilter === 'yesterday') {
+        query = query
+          .gte('pub_date', yesterday.toISOString())
+          .lt('pub_date', today.toISOString());
+      } else if (dateFilter === 'day_before_yesterday') {
+        query = query
+          .gte('pub_date', dayBeforeYesterday.toISOString())
+          .lt('pub_date', yesterday.toISOString());
+      }
+    }
+
+    const { data, error } = await query
       .order('pub_date', { ascending: false, nullsFirst: false })
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);

@@ -9,25 +9,29 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const ARTICLES_PER_PAGE = 20;
 
+type DateFilter = 'all' | 'today' | 'yesterday' | 'day_before_yesterday';
+
 export default function Home() {
   const [articles, setArticles] = useState<ArticleWithFeed[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dateFilter, setDateFilter] = useState<DateFilter>('all');
 
   useEffect(() => {
     fetchArticles();
-  }, [currentPage]);
+  }, [currentPage, dateFilter]);
 
   const fetchArticles = async () => {
     setIsLoading(true);
     setError(null);
 
     try {
+      const filterParam = dateFilter !== 'all' ? `&date_filter=${dateFilter}` : '';
       const [articlesRes, countRes] = await Promise.all([
-        fetch(`/api/articles?page=${currentPage}&limit=${ARTICLES_PER_PAGE}`),
-        fetch('/api/articles/count'),
+        fetch(`/api/articles?page=${currentPage}&limit=${ARTICLES_PER_PAGE}${filterParam}`),
+        fetch(`/api/articles/count?${dateFilter !== 'all' ? `date_filter=${dateFilter}` : ''}`),
       ]);
 
       if (!articlesRes.ok || !countRes.ok) {
@@ -51,11 +55,58 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleDateFilterChange = (filter: DateFilter) => {
+    setDateFilter(filter);
+    setCurrentPage(1);
+  };
+
   return (
     <div className="min-h-screen">
       <Header />
 
       <main className="container mx-auto px-4 max-w-5xl">
+        <div className="flex gap-2 mb-8 border-b-[3px] border-double border-black dark:border-gray-300 pb-6">
+          <button
+            onClick={() => handleDateFilterChange('all')}
+            className={`px-6 py-2 font-bold text-sm tracking-wider transition-all border-2 border-black dark:border-gray-300 ${
+              dateFilter === 'all'
+                ? 'bg-black dark:bg-gray-300 text-white dark:text-black'
+                : 'bg-white dark:bg-gray-900 text-black dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+            }`}
+          >
+            全て
+          </button>
+          <button
+            onClick={() => handleDateFilterChange('today')}
+            className={`px-6 py-2 font-bold text-sm tracking-wider transition-all border-2 border-black dark:border-gray-300 ${
+              dateFilter === 'today'
+                ? 'bg-black dark:bg-gray-300 text-white dark:text-black'
+                : 'bg-white dark:bg-gray-900 text-black dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+            }`}
+          >
+            今日
+          </button>
+          <button
+            onClick={() => handleDateFilterChange('yesterday')}
+            className={`px-6 py-2 font-bold text-sm tracking-wider transition-all border-2 border-black dark:border-gray-300 ${
+              dateFilter === 'yesterday'
+                ? 'bg-black dark:bg-gray-300 text-white dark:text-black'
+                : 'bg-white dark:bg-gray-900 text-black dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+            }`}
+          >
+            昨日
+          </button>
+          <button
+            onClick={() => handleDateFilterChange('day_before_yesterday')}
+            className={`px-6 py-2 font-bold text-sm tracking-wider transition-all border-2 border-black dark:border-gray-300 ${
+              dateFilter === 'day_before_yesterday'
+                ? 'bg-black dark:bg-gray-300 text-white dark:text-black'
+                : 'bg-white dark:bg-gray-900 text-black dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+            }`}
+          >
+            一昨日
+          </button>
+        </div>
         {isLoading ? (
           <div className="space-y-8">
             {[...Array(5)].map((_, i) => (
