@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Header from '@/components/Header';
 import ArticleList from '@/components/ArticleList';
 import ArticlePagination from '@/components/ArticlePagination';
@@ -18,6 +18,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dateFilter, setDateFilter] = useState<DateFilter>('all');
+  const contentTopRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchArticles();
@@ -52,7 +53,18 @@ export default function Home() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      if (contentTopRef.current) {
+        const headerHeight = 80;
+        const elementPosition = contentTopRef.current.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'instant'
+        });
+      }
+    }, 50);
   };
 
   const handleDateFilterChange = (filter: DateFilter) => {
@@ -65,7 +77,7 @@ export default function Home() {
       <Header />
 
       <main className="container mx-auto px-4 max-w-5xl">
-        <div className="flex flex-wrap gap-2 mb-8 border-b-[3px] border-double border-black dark:border-gray-300 pb-6">
+        <div ref={contentTopRef} className="flex flex-wrap gap-2 mb-8 border-b-[3px] border-double border-black dark:border-gray-300 pb-6">
           <button
             onClick={() => handleDateFilterChange('all')}
             className={`px-4 sm:px-6 py-2 font-bold text-xs sm:text-sm tracking-wider transition-all border-2 border-black dark:border-gray-300 ${
