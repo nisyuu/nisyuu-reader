@@ -74,7 +74,7 @@ export default function Home() {
                 : 'bg-white dark:bg-gray-900 text-black dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
             }`}
           >
-            全て
+            All
           </button>
           <button
             onClick={() => handleDateFilterChange('today')}
@@ -84,7 +84,7 @@ export default function Home() {
                 : 'bg-white dark:bg-gray-900 text-black dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
             }`}
           >
-            今日
+            Today
           </button>
           <button
             onClick={() => handleDateFilterChange('yesterday')}
@@ -94,7 +94,7 @@ export default function Home() {
                 : 'bg-white dark:bg-gray-900 text-black dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
             }`}
           >
-            昨日
+            Yesterday
           </button>
           <button
             onClick={() => handleDateFilterChange('day_before_yesterday')}
@@ -104,7 +104,7 @@ export default function Home() {
                 : 'bg-white dark:bg-gray-900 text-black dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
             }`}
           >
-            一昨日
+            2 Days Ago
           </button>
         </div>
         {isLoading ? (
