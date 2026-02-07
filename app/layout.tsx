@@ -8,9 +8,13 @@ export const metadata: Metadata = {
   title: 'NISYUU READER - Daily News Selection',
   description: 'Nisyuu\'s curated collection of daily news articles from various sources, presented in a classic newspaper format.',
   openGraph: {
+    type: 'website',
     images: [
       {
-        url: 'https://bolt.new/static/og_default.png',
+        url: '/og-image.svg',
+        width: 1200,
+        height: 630,
+        alt: 'NISYUU READER - Daily News Selection',
       },
     ],
   },
@@ -18,7 +22,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [
       {
-        url: 'https://bolt.new/static/og_default.png',
+        url: '/og-image.svg',
+        width: 1200,
+        height: 630,
+        alt: 'NISYUU READER - Daily News Selection',
       },
     ],
   },
