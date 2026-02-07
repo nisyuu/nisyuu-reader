@@ -6,13 +6,13 @@ const parser = new Parser();
 
 export async function fetchAndStoreRSSFeeds() {
   const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Supabase credentials not found in environment variables');
+  if (!supabaseUrl || !supabaseServiceKey) {
+    throw new Error('Supabase URL or SERVICE_ROLE_KEY not found in environment variables');
   }
 
-  const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+  const supabase = createClient<Database>(supabaseUrl, supabaseServiceKey);
 
   const { data: feeds, error: feedsError } = await supabase
     .from('feeds')
@@ -78,13 +78,13 @@ export async function fetchAndStoreRSSFeeds() {
 
 export async function cleanupOldArticles(daysToKeep: number = 7) {
   const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Supabase credentials not found in environment variables');
+  if (!supabaseUrl || !supabaseServiceKey) {
+    throw new Error('Supabase URL or SERVICE_ROLE_KEY not found in environment variables');
   }
 
-  const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+  const supabase = createClient<Database>(supabaseUrl, supabaseServiceKey);
 
   const cutoffDate = new Date();
   cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
