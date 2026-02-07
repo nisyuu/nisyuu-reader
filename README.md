@@ -145,18 +145,14 @@ Supabase Edge Functionsは以下の環境変数を自動的に利用できます
 
 ```bash
 # 依存関係のインストール
-npm install
+yarn install
 
 # 開発サーバーの起動
-npm run dev
+yarn dev
 
 # 本番ビルド
-npm run build
+yarn build
 
 # 型チェック
-npm run typecheck
+yarn typecheck
 ```
-
-## ライセンス
-
-Private
