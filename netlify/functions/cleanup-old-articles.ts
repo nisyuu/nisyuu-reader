@@ -1,6 +1,14 @@
 import { schedule } from '@netlify/functions';
 import { cleanupOldArticles } from '../../lib/rss-fetcher';
 
+process.removeAllListeners('warning');
+process.on('warning', (warning) => {
+  if (warning.name === 'DeprecationWarning' && warning.message.includes('punycode')) {
+    return;
+  }
+  console.warn(warning);
+});
+
 const handler = schedule('0 20 * * *', async () => {
   try {
     console.log('Starting article cleanup job...');
