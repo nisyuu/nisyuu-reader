@@ -6,9 +6,12 @@ import Script from 'next/script';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://nisyuu-reader.netlify.app'),
   title: 'NISYUU READER - Daily News Selection',
   description: 'Nisyuu\'s curated collection of daily news articles from various sources, presented in a classic newspaper format.',
   openGraph: {
+    title: 'NISYUU READER - Daily News Selection',
+    description: 'Nisyuu\'s curated collection of daily news articles from various sources, presented in a classic newspaper format.',
     type: 'website',
     images: [
       {
@@ -21,6 +24,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
+    title: 'NISYUU READER - Daily News Selection',
+    description: 'Nisyuu\'s curated collection of daily news articles from various sources, presented in a classic newspaper format.',
     images: [
       {
         url: '/ogp.png',
