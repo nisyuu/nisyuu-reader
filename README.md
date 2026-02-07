@@ -28,9 +28,10 @@ NISYUU READERは、さまざまなソースからキュレーションされた�
 
 ### バックエンド
 - **Supabase** - データベース（PostgreSQL）
-- **Netlify Functions** - サーバーレス関数
+- **Supabase Edge Functions** - サーバーレス関数
   - RSS取得（定期実行）
   - 古い記事のクリーンアップ（定期実行）
+- **Supabase Cron Jobs** - 定期実行スケジューラー
 
 ### データ処理
 - **rss-parser** - RSS/Atomフィードのパース
@@ -53,13 +54,13 @@ project/
 │   ├── ThemeToggle.tsx           # テーマ切替
 │   └── ui/                       # shadcn/uiコンポーネント
 ├── lib/                          # ユーティリティ
-│   ├── rss-fetcher.ts            # RSS取得ロジック
 │   ├── supabase.ts               # Supabaseクライアント
 │   └── utils.ts                  # ヘルパー関数
-├── netlify/functions/            # Netlify Functions
-│   ├── fetch-rss.ts              # RSS取得（定期実行）
-│   └── cleanup-old-articles.ts   # 古い記事削除（定期実行）
-├── supabase/migrations/          # データベースマイグレーション
+├── supabase/                     # Supabase設定
+│   ├── functions/                # Edge Functions
+│   │   ├── fetch-rss/            # RSS取得（定期実行）
+│   │   └── cleanup-old-articles/ # 古い記事削除（定期実行）
+│   └── migrations/               # データベースマイグレーション
 └── types/                        # TypeScript型定義
 ```
 
@@ -95,12 +96,13 @@ RSSフィードの情報を管理
 
 ### Netlify
 - **ホスティング**: Next.jsアプリケーションのホスティング
-- **サーバーレス関数**: 定期実行タスク
-  - RSS取得: 1時間ごとに実行
-  - 記事クリーンアップ: 1日1回実行（投稿から3日過ぎた記事を削除）
 
 ### Supabase
 - **データベース**: PostgreSQL
+- **Edge Functions**: サーバーレス関数
+  - RSS取得: 1時間ごとに実行
+  - 記事クリーンアップ: 1日1回実行（投稿から3日過ぎた記事を削除）
+- **Cron Jobs**: pg_cronを使用した定期実行スケジューラー
 - **Row Level Security (RLS)**: すべてのテーブルで有効
 - **自動バックアップ**: Supabaseの標準機能
 
@@ -111,6 +113,7 @@ RSSフィードの情報を管理
 ```
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 ### Netlify本番環境用
@@ -118,16 +121,25 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 Netlifyダッシュボードで以下の環境変数を設定してください：
 
 ```
-SUPABASE_URL=your_supabase_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_SITE_URL=https://reader.nisyuu.com
 ```
 
 設定方法：
 1. Netlifyダッシュボード → Site settings → Environment variables
-2. 上記の4つの環境変数を追加
+2. 上記の環境変数を追加
 3. サイトを再デプロイ
+
+### Supabase Edge Functions
+
+Supabase Edge Functionsは以下の環境変数を自動的に利用できます：
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `SUPABASE_DB_URL`
+
+追加の環境変数が必要な場合は、Supabaseダッシュボードから設定できます。
 
 ## 開発
 
