@@ -6,7 +6,7 @@ import Script from 'next/script';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://nisyuu-reader.netlify.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://reader.nisyuu.com/'),
   title: 'NISYUU READER - Daily News Selection',
   description: 'Nisyuu\'s curated collection of daily news articles from various sources, presented in a classic newspaper format.',
   openGraph: {
