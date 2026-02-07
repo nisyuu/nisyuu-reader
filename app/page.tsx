@@ -65,10 +65,10 @@ export default function Home() {
       <Header />
 
       <main className="container mx-auto px-4 max-w-5xl">
-        <div className="flex gap-2 mb-8 border-b-[3px] border-double border-black dark:border-gray-300 pb-6">
+        <div className="flex flex-wrap gap-2 mb-8 border-b-[3px] border-double border-black dark:border-gray-300 pb-6">
           <button
             onClick={() => handleDateFilterChange('all')}
-            className={`px-6 py-2 font-bold text-sm tracking-wider transition-all border-2 border-black dark:border-gray-300 ${
+            className={`px-4 sm:px-6 py-2 font-bold text-xs sm:text-sm tracking-wider transition-all border-2 border-black dark:border-gray-300 ${
               dateFilter === 'all'
                 ? 'bg-black dark:bg-gray-300 text-white dark:text-black'
                 : 'bg-white dark:bg-gray-900 text-black dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
@@ -78,7 +78,7 @@ export default function Home() {
           </button>
           <button
             onClick={() => handleDateFilterChange('today')}
-            className={`px-6 py-2 font-bold text-sm tracking-wider transition-all border-2 border-black dark:border-gray-300 ${
+            className={`px-4 sm:px-6 py-2 font-bold text-xs sm:text-sm tracking-wider transition-all border-2 border-black dark:border-gray-300 ${
               dateFilter === 'today'
                 ? 'bg-black dark:bg-gray-300 text-white dark:text-black'
                 : 'bg-white dark:bg-gray-900 text-black dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
@@ -88,7 +88,7 @@ export default function Home() {
           </button>
           <button
             onClick={() => handleDateFilterChange('yesterday')}
-            className={`px-6 py-2 font-bold text-sm tracking-wider transition-all border-2 border-black dark:border-gray-300 ${
+            className={`px-4 sm:px-6 py-2 font-bold text-xs sm:text-sm tracking-wider transition-all border-2 border-black dark:border-gray-300 ${
               dateFilter === 'yesterday'
                 ? 'bg-black dark:bg-gray-300 text-white dark:text-black'
                 : 'bg-white dark:bg-gray-900 text-black dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
@@ -98,7 +98,7 @@ export default function Home() {
           </button>
           <button
             onClick={() => handleDateFilterChange('day_before_yesterday')}
-            className={`px-6 py-2 font-bold text-sm tracking-wider transition-all border-2 border-black dark:border-gray-300 ${
+            className={`px-4 sm:px-6 py-2 font-bold text-xs sm:text-sm tracking-wider transition-all border-2 border-black dark:border-gray-300 ${
               dateFilter === 'day_before_yesterday'
                 ? 'bg-black dark:bg-gray-300 text-white dark:text-black'
                 : 'bg-white dark:bg-gray-900 text-black dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
