@@ -24,23 +24,32 @@ export async function GET(request: Request) {
       `);
 
     if (dateFilter) {
-      const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const yesterday = new Date(today);
-      yesterday.setDate(yesterday.getDate() - 1);
-      const dayBeforeYesterday = new Date(today);
-      dayBeforeYesterday.setDate(dayBeforeYesterday.getDate() - 2);
+      const nowUTC = new Date();
+      const nowJST = new Date(nowUTC.getTime() + (9 * 60 * 60 * 1000));
+      const todayJST = new Date(nowJST.getFullYear(), nowJST.getMonth(), nowJST.getDate());
+      const todayUTC = new Date(todayJST.getTime() - (9 * 60 * 60 * 1000));
+
+      const yesterdayUTC = new Date(todayUTC);
+      yesterdayUTC.setDate(yesterdayUTC.getDate() - 1);
+
+      const dayBeforeYesterdayUTC = new Date(todayUTC);
+      dayBeforeYesterdayUTC.setDate(dayBeforeYesterdayUTC.getDate() - 2);
+
+      const tomorrowUTC = new Date(todayUTC);
+      tomorrowUTC.setDate(tomorrowUTC.getDate() + 1);
 
       if (dateFilter === 'today') {
-        query = query.gte('pub_date', today.toISOString());
+        query = query
+          .gte('pub_date', todayUTC.toISOString())
+          .lt('pub_date', tomorrowUTC.toISOString());
       } else if (dateFilter === 'yesterday') {
         query = query
-          .gte('pub_date', yesterday.toISOString())
-          .lt('pub_date', today.toISOString());
+          .gte('pub_date', yesterdayUTC.toISOString())
+          .lt('pub_date', todayUTC.toISOString());
       } else if (dateFilter === 'day_before_yesterday') {
         query = query
-          .gte('pub_date', dayBeforeYesterday.toISOString())
-          .lt('pub_date', yesterday.toISOString());
+          .gte('pub_date', dayBeforeYesterdayUTC.toISOString())
+          .lt('pub_date', yesterdayUTC.toISOString());
       }
     }
 
