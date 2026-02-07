@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-image.png',
+        url: '/ogp.png',
         width: 1456,
         height: 832,
         alt: 'NISYUU READER - Daily News Selection',
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [
       {
-        url: '/og-image.png',
+        url: '/ogp.png',
         width: 1456,
         height: 832,
         alt: 'NISYUU READER - Daily News Selection',
