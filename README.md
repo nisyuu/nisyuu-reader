@@ -106,10 +106,28 @@ RSSフィードの情報を管理
 
 ## 環境変数
 
+### ローカル開発用（.envファイル）
+
 ```
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
+
+### Netlify本番環境用
+
+Netlifyダッシュボードで以下の環境変数を設定してください：
+
+```
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+設定方法：
+1. Netlifyダッシュボード → Site settings → Environment variables
+2. 上記の4つの環境変数を追加
+3. サイトを再デプロイ
 
 ## 開発
 
