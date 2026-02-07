@@ -9,7 +9,7 @@ export default function Header() {
   });
 
   return (
-    <header className="border-t-[6px] border-b-[6px] border-double border-black dark:border-gray-300 py-8 mb-8 relative">
+    <header className="border-b-[6px] border-double border-black dark:border-gray-300 py-8 mb-8 relative">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
