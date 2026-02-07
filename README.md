@@ -19,7 +19,7 @@ NISYUU READERは、さまざまなソースからキュレーションされた�
 ## 技術スタック
 
 ### フロントエンド
-- **Next.js 13.5.1** - Reactフレームワーク
+- **Next.js** - Reactフレームワーク
 - **TypeScript** - 型安全性
 - **Tailwind CSS** - スタイリング
 - **shadcn/ui** - UIコンポーネントライブラリ
