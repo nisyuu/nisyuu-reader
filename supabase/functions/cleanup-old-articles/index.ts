@@ -22,7 +22,7 @@ Deno.serve(async (req: Request) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const url = new URL(req.url);
-    const daysToKeep = parseInt(url.searchParams.get("days") || "7", 10);
+    const daysToKeep = parseInt(url.searchParams.get("days") || "3", 10);
 
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
