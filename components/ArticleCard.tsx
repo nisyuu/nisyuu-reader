@@ -1,4 +1,4 @@
-import type { ArticleWithFeed } from '@/types/database';
+import type { ArticleWithFeed } from '@/types/article';
 
 interface ArticleCardProps {
   article: ArticleWithFeed;
