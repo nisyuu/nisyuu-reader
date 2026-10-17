@@ -19,7 +19,9 @@ async function fetchFeed(feed: Feed): Promise<ArticleWithFeed[]> {
     if (!item.link || !item.title) {
       return [];
     }
-    const pubDate = item.pubDate ? new Date(item.pubDate) : null;
+    // RSS 1.0（RDF）の記事はdc:dateしか持たずpubDateが空になるので、rss-parserがdc:dateからも作るisoDateを優先する
+    const date = item.isoDate || item.pubDate;
+    const pubDate = date ? new Date(date) : null;
     return [{
       id: item.link,
       title: item.title,
