@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import Header from '@/components/Header';
 import ArticleList from '@/components/ArticleList';
 import ArticlePagination from '@/components/ArticlePagination';
-import type { ArticleWithFeed } from '@/types/database';
+import type { ArticleWithFeed } from '@/types/article';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const ARTICLES_PER_PAGE = 20;

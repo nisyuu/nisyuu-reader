@@ -4,7 +4,7 @@
 
 ## サイトについて
 
-NISYUU READERは、さまざまなソースからキュレーションされたニュース記事を、洗練された新聞形式で提供します。記事はRSSフィードから自動的に取得され、データベースに保存されます。定期的に古い記事はクリーンアップされ、常に最新のニュースをお届けします。
+NISYUU READERは、さまざまなソースからキュレーションされたニュース記事を、洗練された新聞形式で提供します。記事はRSSフィードから直接取得し、1時間ごとに更新します。直近3日以内の記事だけを表示するので、常に最新のニュースをお届けします。
 
 ### 主な機能
 
@@ -27,11 +27,8 @@ NISYUU READERは、さまざまなソースからキュレーションされた�
 - **next-themes** - ダークモードサポート
 
 ### バックエンド
-- **Supabase** - データベース（PostgreSQL）
-- **Supabase Edge Functions** - サーバーレス関数
-  - RSS取得（定期実行）
-  - 古い記事のクリーンアップ（定期実行）
-- **Supabase Cron Jobs** - 定期実行スケジューラー
+- **Next.js Route Handlers** - RSSを取得して記事一覧を返すAPI
+  - 取得結果は1時間キャッシュ（`unstable_cache`）
 
 ### データ処理
 - **rss-parser** - RSS/Atomフィードのパース
@@ -54,43 +51,15 @@ project/
 │   ├── ThemeToggle.tsx           # テーマ切替
 │   └── ui/                       # shadcn/uiコンポーネント
 ├── lib/                          # ユーティリティ
-│   ├── supabase.ts               # Supabaseクライアント
+│   ├── articles.ts               # RSS取得・キャッシュ・日付絞り込み
+│   ├── feeds.ts                  # 取得するRSSフィードの一覧
 │   └── utils.ts                  # ヘルパー関数
-├── supabase/                     # Supabase設定
-│   ├── functions/                # Edge Functions
-│   │   ├── fetch-rss/            # RSS取得（定期実行）
-│   │   └── cleanup-old-articles/ # 古い記事削除（定期実行）
-│   └── migrations/               # データベースマイグレーション
 └── types/                        # TypeScript型定義
 ```
 
-## データベーススキーマ
+## RSSフィードの追加・削除
 
-### feeds テーブル
-RSSフィードの情報を管理
-
-| カラム名 | 型 | 説明 |
-|---------|-----|------|
-| id | uuid | プライマリキー |
-| url | text | フィードURL |
-| name | text | フィード名 |
-| created_at | timestamptz | 作成日時 |
-
-### articles テーブル
-取得した記事を保存
-
-| カラム名 | 型 | 説明 |
-|---------|-----|------|
-| id | uuid | プライマリキー |
-| feed_id | uuid | フィードID（外部キー） |
-| title | text | 記事タイトル |
-| link | text | 記事URL |
-| pub_date | timestamptz | 公開日時 |
-| content | text | 記事内容 |
-| content_snippet | text | 要約 |
-| creator | text | 著者名 |
-| guid | text | 一意識別子 |
-| created_at | timestamptz | 作成日時 |
+`lib/feeds.ts` の `FEEDS` を編集して `main` にpushすると反映されます。
 
 ## サーバー構成
 
@@ -98,32 +67,19 @@ RSSフィードの情報を管理
 - **ホスティング**: Next.jsアプリケーションのホスティング
 - **デプロイ**: GitHubリポジトリと連携し、`main` ブランチへのpushで自動デプロイ（設定は `netlify.toml`）
 
-### Supabase
-- **データベース**: PostgreSQL
-- **Edge Functions**: サーバーレス関数
-  - RSS取得: 1時間ごとに実行
-  - 記事クリーンアップ: 1日1回実行（投稿から3日過ぎた記事を削除）
-- **Cron Jobs**: pg_cronを使用した定期実行スケジューラー
-- **Row Level Security (RLS)**: すべてのテーブルで有効
-- **自動バックアップ**: Supabaseの標準機能
-
 ## 環境変数
 
 ### ローカル開発用（.envファイル）
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 ### Netlify本番環境用
 
-Netlifyダッシュボードで以下の環境変数を設定してください：
+Netlifyダッシュボードで以下の環境変数を設定してください（未設定でも `https://reader.nisyuu.com` が使われます）：
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 NEXT_PUBLIC_SITE_URL=https://reader.nisyuu.com
 ```
 
@@ -131,16 +87,6 @@ NEXT_PUBLIC_SITE_URL=https://reader.nisyuu.com
 1. Netlifyダッシュボード → Site settings → Environment variables
 2. 上記の環境変数を追加
 3. サイトを再デプロイ
-
-### Supabase Edge Functions
-
-Supabase Edge Functionsは以下の環境変数を自動的に利用できます：
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `SUPABASE_DB_URL`
-
-追加の環境変数が必要な場合は、Supabaseダッシュボードから設定できます。
 
 ## 開発
 
