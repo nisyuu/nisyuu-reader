@@ -96,6 +96,7 @@ RSSフィードの情報を管理
 
 ### Netlify
 - **ホスティング**: Next.jsアプリケーションのホスティング
+- **デプロイ**: GitHubリポジトリと連携し、`main` ブランチへのpushで自動デプロイ（設定は `netlify.toml`）
 
 ### Supabase
 - **データベース**: PostgreSQL
